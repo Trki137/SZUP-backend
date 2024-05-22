@@ -85,9 +85,7 @@ public class TeamServiceImplTest {
     void testCreateTeam_ProjectNotFound() {
         when(projectDao.findById(anyLong())).thenReturn(java.util.Optional.empty());
 
-        assertThrows(EntityNotFoundException.class, () -> {
-            teamService.createTeam(new TeamRequestDTO("Team A", Collections.emptyList()), 1L);
-        });
+        assertThrows(EntityNotFoundException.class, () -> teamService.createTeam(new TeamRequestDTO("Team A", Collections.emptyList()), 1L));
 
         verify(projectDao, times(1)).findById(anyLong());
         verifyNoMoreInteractions(projectDao);
@@ -101,9 +99,7 @@ public class TeamServiceImplTest {
         when(projectDao.findById(anyLong())).thenReturn(java.util.Optional.of(projectEntity));
         when(teamDao.existsByTeamNameAndProject(anyString(), any(ProjectEntity.class))).thenReturn(true);
 
-        assertThrows(ResponseStatusException.class, () -> {
-            teamService.createTeam(teamRequestDTO, 1L);
-        });
+        assertThrows(ResponseStatusException.class, () -> teamService.createTeam(teamRequestDTO, 1L));
 
         verify(projectDao, times(1)).findById(anyLong());
         verify(teamDao, times(1)).existsByTeamNameAndProject(anyString(), any(ProjectEntity.class));
@@ -137,9 +133,7 @@ public class TeamServiceImplTest {
     void testUpdateTeam_ProjectNotFound() {
         when(projectDao.findById(anyLong())).thenReturn(java.util.Optional.empty());
 
-        assertThrows(EntityNotFoundException.class, () -> {
-            teamService.updateTeam(new TeamUpdateRequestDTO("Updated Team"), 1L, 1L);
-        });
+        assertThrows(EntityNotFoundException.class, () -> teamService.updateTeam(new TeamUpdateRequestDTO("Updated Team"), 1L, 1L));
 
         verify(projectDao, times(1)).findById(anyLong());
         verifyNoMoreInteractions(projectDao);
@@ -153,9 +147,7 @@ public class TeamServiceImplTest {
         when(projectDao.findById(anyLong())).thenReturn(java.util.Optional.of(projectEntity));
         when(teamDao.findById(anyLong())).thenReturn(java.util.Optional.empty());
 
-        assertThrows(EntityNotFoundException.class, () -> {
-            teamService.updateTeam(new TeamUpdateRequestDTO("Updated Team"), 1L, 1L);
-        });
+        assertThrows(EntityNotFoundException.class, () -> teamService.updateTeam(new TeamUpdateRequestDTO("Updated Team"), 1L, 1L));
 
         verify(projectDao, times(1)).findById(anyLong());
         verify(teamDao, times(1)).findById(anyLong());
@@ -193,9 +185,7 @@ public class TeamServiceImplTest {
     void testAddMember_ProjectNotFound() {
         when(projectDao.findById(anyLong())).thenReturn(java.util.Optional.empty());
 
-        assertThrows(EntityNotFoundException.class, () -> {
-            teamService.addMember(1L, 1L, 1L, 1L);
-        });
+        assertThrows(EntityNotFoundException.class, () -> teamService.addMember(1L, 1L, 1L, 1L));
 
         verify(projectDao, times(1)).findById(anyLong());
         verifyNoMoreInteractions(projectDao);
@@ -208,9 +198,7 @@ public class TeamServiceImplTest {
         when(projectDao.findById(anyLong())).thenReturn(java.util.Optional.of(projectEntity));
         when(teamDao.findById(anyLong())).thenReturn(java.util.Optional.empty());
 
-        assertThrows(EntityNotFoundException.class, () -> {
-            teamService.addMember(1L, 1L, 1L, 1L);
-        });
+        assertThrows(EntityNotFoundException.class, () -> teamService.addMember(1L, 1L, 1L, 1L));
 
         verify(projectDao, times(1)).findById(anyLong());
         verify(teamDao, times(1)).findById(anyLong());
@@ -228,9 +216,7 @@ public class TeamServiceImplTest {
         when(teamDao.findById(anyLong())).thenReturn(java.util.Optional.of(teamEntity));
         when(userDao.findById(anyLong())).thenReturn(java.util.Optional.empty());
 
-        assertThrows(EntityNotFoundException.class, () -> {
-            teamService.addMember(1L, 1L, 1L, 1L);
-        });
+        assertThrows(EntityNotFoundException.class, () -> teamService.addMember(1L, 1L, 1L, 1L));
 
         verify(projectDao, times(1)).findById(anyLong());
         verify(teamDao, times(1)).findById(anyLong());

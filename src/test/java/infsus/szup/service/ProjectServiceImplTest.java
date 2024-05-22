@@ -75,9 +75,7 @@ public class ProjectServiceImplTest {
 
         when(projectDao.existsByProjectName(any(String.class))).thenReturn(true);
 
-        assertThrows(ResponseStatusException.class, () -> {
-            projectService.createProject(projectRequestDTO);
-        });
+        assertThrows(ResponseStatusException.class, () -> projectService.createProject(projectRequestDTO));
 
         verify(projectDao, times(1)).existsByProjectName(any(String.class));
         verifyNoMoreInteractions(projectDao);
@@ -90,9 +88,7 @@ public class ProjectServiceImplTest {
         when(projectDao.existsByProjectName(any(String.class))).thenReturn(false);
         when(userDao.findById(anyLong())).thenReturn(java.util.Optional.empty());
 
-        assertThrows(EntityNotFoundException.class, () -> {
-            projectService.createProject(projectRequestDTO);
-        });
+        assertThrows(EntityNotFoundException.class, () -> projectService.createProject(projectRequestDTO));
 
         verify(projectDao, times(1)).existsByProjectName(any(String.class));
         verify(userDao, times(1)).findById(anyLong());
@@ -124,9 +120,7 @@ public class ProjectServiceImplTest {
 
         when(projectDao.findById(anyLong())).thenReturn(java.util.Optional.empty());
 
-        assertThrows(EntityNotFoundException.class, () -> {
-            projectService.updateProject(1L, updateProjectReqDTO);
-        });
+        assertThrows(EntityNotFoundException.class, () -> projectService.updateProject(1L, updateProjectReqDTO));
 
         verify(projectDao, times(1)).findById(anyLong());
         verifyNoMoreInteractions(projectDao);
@@ -140,9 +134,7 @@ public class ProjectServiceImplTest {
         when(projectDao.findById(anyLong())).thenReturn(java.util.Optional.of(projectEntity));
         when(projectDao.existsByProjectName(any(String.class))).thenReturn(true);
 
-        assertThrows(ResponseStatusException.class, () -> {
-            projectService.updateProject(1L, updateProjectReqDTO);
-        });
+        assertThrows(ResponseStatusException.class, () -> projectService.updateProject(1L, updateProjectReqDTO));
 
         verify(projectDao, times(1)).findById(anyLong());
         verify(projectDao, times(1)).existsByProjectName(any(String.class));
@@ -167,9 +159,7 @@ public class ProjectServiceImplTest {
     void testDeleteProject_ProjectNotFound() {
         when(projectDao.findById(anyLong())).thenReturn(java.util.Optional.empty());
 
-        assertThrows(EntityNotFoundException.class, () -> {
-            projectService.deleteProject(1L);
-        });
+        assertThrows(EntityNotFoundException.class, () -> projectService.deleteProject(1L));
 
         verify(projectDao, times(1)).findById(anyLong());
         verifyNoMoreInteractions(projectDao);

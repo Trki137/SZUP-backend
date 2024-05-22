@@ -64,9 +64,7 @@ public class TeamMemberServiceImplTest {
 
         when(teamDao.findById(anyLong())).thenReturn(java.util.Optional.empty());
 
-        assertThrows(EntityNotFoundException.class, () -> {
-            teamMemberService.createTeamMember(teamMemberRequestDTO, 1L);
-        });
+        assertThrows(EntityNotFoundException.class, () -> teamMemberService.createTeamMember(teamMemberRequestDTO, 1L));
 
         verify(teamDao, times(1)).findById(anyLong());
         verifyNoMoreInteractions(teamDao);
@@ -82,9 +80,7 @@ public class TeamMemberServiceImplTest {
         when(teamDao.findById(anyLong())).thenReturn(java.util.Optional.of(teamEntity));
         when(userDao.findById(anyLong())).thenReturn(java.util.Optional.empty());
 
-        assertThrows(EntityNotFoundException.class, () -> {
-            teamMemberService.createTeamMember(teamMemberRequestDTO, 1L);
-        });
+        assertThrows(EntityNotFoundException.class, () -> teamMemberService.createTeamMember(teamMemberRequestDTO, 1L));
 
         verify(teamDao, times(1)).findById(anyLong());
         verify(userDao, times(1)).findById(anyLong());
