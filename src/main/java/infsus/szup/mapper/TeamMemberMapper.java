@@ -7,5 +7,15 @@ import org.mapstruct.ReportingPolicy;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring")
 public interface TeamMemberMapper {
-    TeamMemberResponseDTO toTeamMemberResponse(TeamMemberEntity teamMemberEntity);
+    default TeamMemberResponseDTO toTeamMemberResponse(TeamMemberEntity teamMemberEntity) {
+        if (teamMemberEntity == null) {
+            return null;
+        } else {
+            Long id = teamMemberEntity.getId();
+            String firstName = teamMemberEntity.getTeamMember().getFirstName();
+            String lastName = teamMemberEntity.getTeamMember().getLastName();
+            Boolean isLeader = teamMemberEntity.getTeamLeader();
+            return new TeamMemberResponseDTO(id, firstName, lastName, isLeader);
+        }
+    }
 }
