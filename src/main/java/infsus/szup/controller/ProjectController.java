@@ -5,13 +5,12 @@ import infsus.szup.model.dto.project.ProjectResponseDTO;
 import infsus.szup.model.dto.project.UpdateProjectReqDTO;
 import infsus.szup.service.ProjectService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping
 public class ProjectController {
     private final ProjectService projectService;
 

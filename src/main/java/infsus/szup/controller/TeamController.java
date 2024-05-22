@@ -5,13 +5,12 @@ import infsus.szup.model.dto.team.TeamResponseDTO;
 import infsus.szup.model.dto.team.TeamUpdateRequestDTO;
 import infsus.szup.service.TeamService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping
 public class TeamController {
     private final TeamService teamService;
 

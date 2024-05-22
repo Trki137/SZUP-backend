@@ -32,6 +32,6 @@ public class TeamEntity {
     @ManyToOne
     private ProjectEntity project;
 
-    @OneToMany(mappedBy = "team")
+    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL, orphanRemoval = true)
     List<TeamMemberEntity> teamMembers;
 }

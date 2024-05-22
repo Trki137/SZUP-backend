@@ -122,14 +122,14 @@ public class TeamServiceImpl implements TeamService {
         boolean isLeader = team.getTeamMembers()
                 .stream()
                 .filter(TeamMemberEntity::getTeamLeader)
-                .allMatch(member -> member.getId().equals(memberId));
+                .allMatch(member -> member.getTeamMember().getId().equals(addedByUserId));
 
         if (!isLeader) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only team leader can add new member of a team");
         }
 
         teamMemberDao.save(new TeamMemberEntity(null, newMember, team, false));
-
+        em.refresh(team);
         return teamMapper.toTeamResponseDTO(team);
     }
 
@@ -152,18 +152,19 @@ public class TeamServiceImpl implements TeamService {
         boolean isLeader = team.getTeamMembers()
                 .stream()
                 .filter(TeamMemberEntity::getTeamLeader)
-                .allMatch(member -> member.getId().equals(memberId));
+                .allMatch(member -> member.getTeamMember().getId().equals(removedByUserId));
 
         if (!isLeader) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only team leader can add new member of a team");
         }
 
-        final TeamMemberEntity teamMemberEntity = teamMemberDao.findByTeamMember_Id(memberId).orElseThrow(
+        final TeamMemberEntity teamMemberEntity = teamMemberDao.findByTeamMemberAndTeam(userDao.getReferenceById(memberId), team).orElseThrow(
                 () -> new EntityNotFoundException(String.format("Team member with id %d doesnt exists", memberId))
         );
 
         teamMemberDao.delete(teamMemberEntity);
-
+        em.flush();
+        em.refresh(team);
         return teamMapper.toTeamResponseDTO(team);
     }
 }
