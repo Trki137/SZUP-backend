@@ -23,6 +23,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -63,7 +64,7 @@ public class TeamServiceImplTest {
     @Test
     void testCreateTeam_Success() {
         TeamRequestDTO teamRequestDTO = new TeamRequestDTO("Team A", Collections.emptyList());
-        ProjectEntity projectEntity = new ProjectEntity(1L, "Project A", LocalDateTime.now(), new UserEntity());
+        ProjectEntity projectEntity = new ProjectEntity(1L, "Project A", LocalDateTime.now(), new UserEntity(), new ArrayList<>());
 
         when(projectDao.findById(anyLong())).thenReturn(java.util.Optional.of(projectEntity));
         when(teamDao.existsByTeamNameAndProject(anyString(), any(ProjectEntity.class))).thenReturn(false);
@@ -94,7 +95,7 @@ public class TeamServiceImplTest {
     @Test
     void testCreateTeam_TeamAlreadyExists() {
         TeamRequestDTO teamRequestDTO = new TeamRequestDTO("Team A", Collections.emptyList());
-        ProjectEntity projectEntity = new ProjectEntity(1L, "Project A", LocalDateTime.now(), new UserEntity());
+        ProjectEntity projectEntity = new ProjectEntity(1L, "Project A", LocalDateTime.now(), new UserEntity(), new ArrayList<>());
 
         when(projectDao.findById(anyLong())).thenReturn(java.util.Optional.of(projectEntity));
         when(teamDao.existsByTeamNameAndProject(anyString(), any(ProjectEntity.class))).thenReturn(true);
