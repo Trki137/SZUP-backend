@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Table(
         name = "TEAM",
@@ -29,4 +31,7 @@ public class TeamEntity {
     @JoinColumn(name = "PROJECT_ID", nullable = false)
     @ManyToOne
     private ProjectEntity project;
+
+    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL, orphanRemoval = true)
+    List<TeamMemberEntity> teamMembers;
 }

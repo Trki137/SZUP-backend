@@ -33,5 +33,4 @@ public class TeamMemberEntity {
 
     @Column(name = "TEAM_LEADER", nullable = false)
     private Boolean teamLeader;
-
 }
