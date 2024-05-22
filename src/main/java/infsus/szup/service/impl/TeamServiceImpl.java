@@ -1,6 +1,7 @@
 package infsus.szup.service.impl;
 
 import infsus.szup.mapper.TeamMapper;
+import infsus.szup.model.dto.team.TeamInfoResponseDTO;
 import infsus.szup.model.dto.team.TeamRequestDTO;
 import infsus.szup.model.dto.team.TeamResponseDTO;
 import infsus.szup.model.dto.team.TeamUpdateRequestDTO;
@@ -23,6 +24,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -58,7 +61,8 @@ public class TeamServiceImpl implements TeamService {
         for (TeamMemberRequestDTO teamMemberRequestDTO : teamRequestDTO.teamMembers()) {
             teamMemberService.createTeamMember(teamMemberRequestDTO, team.getId());
         }
-
+        em.flush();
+        em.refresh(team);
         return teamMapper.toTeamResponseDTO(team);
     }
 
@@ -166,5 +170,12 @@ public class TeamServiceImpl implements TeamService {
         em.flush();
         em.refresh(team);
         return teamMapper.toTeamResponseDTO(team);
+    }
+
+    @Override
+    public List<TeamInfoResponseDTO> getTeamsForProject(Long projectId) {
+        return projectDao.findById(projectId).orElseThrow(
+                () -> new EntityNotFoundException(String.format("Project with id %d not found", projectId))
+        ).getTeams().stream().map(teamMapper::toTeamInfoResponseDTO).toList();
     }
 }

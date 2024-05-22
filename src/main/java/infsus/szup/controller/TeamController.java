@@ -1,5 +1,6 @@
 package infsus.szup.controller;
 
+import infsus.szup.model.dto.team.TeamInfoResponseDTO;
 import infsus.szup.model.dto.team.TeamRequestDTO;
 import infsus.szup.model.dto.team.TeamResponseDTO;
 import infsus.szup.model.dto.team.TeamUpdateRequestDTO;
@@ -7,6 +8,8 @@ import infsus.szup.service.TeamService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -38,6 +41,11 @@ public class TeamController {
     @PutMapping("/project/{projectId}/team/{teamId}")
     ResponseEntity<TeamResponseDTO> updateTeam(@RequestBody TeamUpdateRequestDTO teamUpdateRequestDTO, @PathVariable Long projectId, @PathVariable Long teamId) {
         return ResponseEntity.ok(teamService.updateTeam(teamUpdateRequestDTO, projectId, teamId));
+    }
+
+    @GetMapping("/project/{projectId}/teams")
+    public ResponseEntity<List<TeamInfoResponseDTO>> getTeamMembers(@PathVariable Long projectId){
+        return ResponseEntity.ok(teamService.getTeamsForProject(projectId));
     }
 
 
