@@ -5,7 +5,9 @@ import infsus.szup.model.entity.UserEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
+import java.util.List;
+
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring")
 public interface UserMapper {
-    UserResponseDTO toUserResponseDTO(UserEntity userEntity);
+    List<UserResponseDTO> toUserResponseDTOs(List<UserEntity> entities);
 }
