@@ -32,6 +32,6 @@ public class TeamEntity {
     @ManyToOne
     private ProjectEntity project;
 
-    @OneToMany(mappedBy = "TEAM_ID")
+    @OneToMany(mappedBy = "team")
     List<TeamMemberEntity> teamMembers;
 }
