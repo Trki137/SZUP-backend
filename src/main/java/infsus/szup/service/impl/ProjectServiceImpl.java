@@ -2,6 +2,7 @@ package infsus.szup.service.impl;
 
 import infsus.szup.model.dto.project.ProjectRequestDTO;
 import infsus.szup.model.dto.project.ProjectResponseDTO;
+import infsus.szup.model.dto.project.UpdateProjectReqDTO;
 import infsus.szup.model.dto.team.TeamRequestDTO;
 import infsus.szup.model.entity.ProjectEntity;
 import infsus.szup.model.entity.UserEntity;
@@ -15,6 +16,7 @@ import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
@@ -27,6 +29,8 @@ public class ProjectServiceImpl implements ProjectService {
     private final TeamService teamService;
     @PersistenceContext
     private final EntityManager em;
+
+    @Transactional
     @Override
     public ProjectResponseDTO createProject(final ProjectRequestDTO projectRequestDTO) {
         if (projectDao.existsByProjectName(projectRequestDTO.projectName())){
@@ -48,6 +52,32 @@ public class ProjectServiceImpl implements ProjectService {
         for (final TeamRequestDTO teamRequestDTO: projectRequestDTO.teams()){
             teamService.createTeam(teamRequestDTO, project.getId());
         }
-        return null;
+        return new ProjectResponseDTO(project.getId(), project.getProjectName());
+    }
+
+    @Transactional
+    @Override
+    public ProjectResponseDTO updateProject(final Long projectId,final UpdateProjectReqDTO updateProjectReqDTO) {
+        final ProjectEntity project = projectDao.findById(projectId).orElseThrow(
+                () -> new EntityNotFoundException(String.format("Project with id %d doesn't exists", projectId))
+        );
+
+        if (projectDao.existsByProjectName(updateProjectReqDTO.projectName())){
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Project name taken!");
+        }
+
+        project.setProjectName(updateProjectReqDTO.projectName());
+
+        return new ProjectResponseDTO(project.getId(), project.getProjectName());
+    }
+
+    @Transactional
+    @Override
+    public void deleteProject(Long projectId) {
+        final ProjectEntity project = projectDao.findById(projectId).orElseThrow(
+                () -> new EntityNotFoundException(String.format("Project with id %d doesn't exists", projectId))
+        );
+
+        projectDao.delete(project);
     }
 }
