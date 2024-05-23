@@ -50,6 +50,9 @@ public class TeamServiceImplTest {
     private TeamMapper teamMapper;
 
     @Mock
+    private TeamMemberService teamMemberService;
+
+    @Mock
     private EntityManager em;
 
     @InjectMocks
@@ -63,7 +66,7 @@ public class TeamServiceImplTest {
     // Test for createTeam method
     @Test
     void testCreateTeam_Success() {
-        TeamRequestDTO teamRequestDTO = new TeamRequestDTO("Team A", Collections.emptyList());
+        TeamRequestDTO teamRequestDTO = new TeamRequestDTO("Team A", 1L);
         ProjectEntity projectEntity = new ProjectEntity(1L, "Project A", LocalDateTime.now(), new UserEntity(), new ArrayList<>());
 
         when(projectDao.findById(anyLong())).thenReturn(java.util.Optional.of(projectEntity));
@@ -86,7 +89,7 @@ public class TeamServiceImplTest {
     void testCreateTeam_ProjectNotFound() {
         when(projectDao.findById(anyLong())).thenReturn(java.util.Optional.empty());
 
-        assertThrows(EntityNotFoundException.class, () -> teamService.createTeam(new TeamRequestDTO("Team A", Collections.emptyList()), 1L));
+        assertThrows(EntityNotFoundException.class, () -> teamService.createTeam(new TeamRequestDTO("Team A", 1L), 1L));
 
         verify(projectDao, times(1)).findById(anyLong());
         verifyNoMoreInteractions(projectDao);
@@ -94,7 +97,7 @@ public class TeamServiceImplTest {
 
     @Test
     void testCreateTeam_TeamAlreadyExists() {
-        TeamRequestDTO teamRequestDTO = new TeamRequestDTO("Team A", Collections.emptyList());
+        TeamRequestDTO teamRequestDTO = new TeamRequestDTO("Team A",  1L);
         ProjectEntity projectEntity = new ProjectEntity(1L, "Project A", LocalDateTime.now(), new UserEntity(), new ArrayList<>());
 
         when(projectDao.findById(anyLong())).thenReturn(java.util.Optional.of(projectEntity));
