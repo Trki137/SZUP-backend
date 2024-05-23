@@ -82,6 +82,7 @@ public class ProjectServiceImpl implements ProjectService {
         projectDao.delete(project);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<ProjectResponseDTO> getAllProjectsForUser(Long userId) {
         return projectDao.getAllProjectsForUser(userId).stream().map(project -> new ProjectResponseDTO(project
