@@ -8,12 +8,18 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping
 public class ProjectController {
     private final ProjectService projectService;
 
+    @GetMapping("/project/all-projects/user/{userId}")
+    ResponseEntity<List<ProjectResponseDTO>> getAllProjectsForUser(@PathVariable Long userId){
+        return ResponseEntity.ok(projectService.getAllProjectsForUser(userId));
+    }
     @PostMapping("/project/create")
     ResponseEntity<ProjectResponseDTO> createTeam(@RequestBody ProjectRequestDTO projectRequestDTO) {
         return ResponseEntity.ok(projectService.createProject(projectRequestDTO));

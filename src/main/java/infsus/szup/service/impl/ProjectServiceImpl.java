@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -33,7 +34,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Transactional
     @Override
     public ProjectResponseDTO createProject(final ProjectRequestDTO projectRequestDTO) {
-        if (projectDao.existsByProjectName(projectRequestDTO.projectName())){
+        if (projectDao.existsByProjectName(projectRequestDTO.projectName())) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Project name taken!");
         }
 
@@ -49,7 +50,7 @@ public class ProjectServiceImpl implements ProjectService {
 
         em.flush();
 
-        for (final TeamRequestDTO teamRequestDTO: projectRequestDTO.teams()){
+        for (final TeamRequestDTO teamRequestDTO : projectRequestDTO.teams()) {
             teamService.createTeam(teamRequestDTO, project.getId());
         }
         return new ProjectResponseDTO(project.getId(), project.getProjectName());
@@ -57,12 +58,12 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Transactional
     @Override
-    public ProjectResponseDTO updateProject(final Long projectId,final UpdateProjectReqDTO updateProjectReqDTO) {
+    public ProjectResponseDTO updateProject(final Long projectId, final UpdateProjectReqDTO updateProjectReqDTO) {
         final ProjectEntity project = projectDao.findById(projectId).orElseThrow(
                 () -> new EntityNotFoundException(String.format("Project with id %d doesn't exists", projectId))
         );
 
-        if (projectDao.existsByProjectName(updateProjectReqDTO.projectName())){
+        if (projectDao.existsByProjectName(updateProjectReqDTO.projectName())) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Project name taken!");
         }
 
@@ -79,5 +80,12 @@ public class ProjectServiceImpl implements ProjectService {
         );
 
         projectDao.delete(project);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<ProjectResponseDTO> getAllProjectsForUser(Long userId) {
+        return projectDao.getAllProjectsForUser(userId).stream().map(project -> new ProjectResponseDTO(project
+                .getId(), project.getProjectName())).toList();
     }
 }
