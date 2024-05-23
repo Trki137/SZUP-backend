@@ -170,6 +170,7 @@ public class TeamServiceImpl implements TeamService {
         return teamMapper.toTeamResponseDTO(team);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<TeamInfoResponseDTO> getTeamsForProject(Long projectId) {
         return projectDao.findById(projectId).orElseThrow(

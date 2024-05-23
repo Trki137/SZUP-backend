@@ -6,6 +6,7 @@ import infsus.szup.repository.UserDao;
 import infsus.szup.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -14,6 +15,8 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     private final UserDao userDao;
     private final UserMapper userMapper;
+
+    @Transactional(readOnly = true)
     @Override
     public List<UserResponseDTO> getAllUsers() {
         return userMapper.toUserResponseDTOs(userDao.findAll());

@@ -15,7 +15,7 @@ public interface ProjectDao extends JpaRepository<ProjectEntity, Long> {
             FROM team_member
             JOIN team on team_member.team_id = team.team_id
             JOIN project on team.project_id = project.project_id
-            WHERE team_member.user_id = :userId;
+            WHERE team_member.user_id = :userId
             """;
     @Query(value = GET_PROJECTS_FOR_USER_QUERY, nativeQuery = true)
     List<ProjectEntity> getAllProjectsForUser(Long userId);
