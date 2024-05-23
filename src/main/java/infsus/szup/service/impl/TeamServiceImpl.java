@@ -57,10 +57,8 @@ public class TeamServiceImpl implements TeamService {
         team = teamDao.save(team);
 
         em.flush();
+        teamMemberService.createTeamMember(new TeamMemberRequestDTO(teamRequestDTO.teamLeaderId(), true), team.getId());
 
-        for (TeamMemberRequestDTO teamMemberRequestDTO : teamRequestDTO.teamMembers()) {
-            teamMemberService.createTeamMember(teamMemberRequestDTO, team.getId());
-        }
         em.flush();
         em.refresh(team);
         return teamMapper.toTeamResponseDTO(team);
