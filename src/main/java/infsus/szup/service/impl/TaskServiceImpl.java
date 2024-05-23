@@ -14,6 +14,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
@@ -29,6 +30,7 @@ public class TaskServiceImpl implements TaskService {
     private final PriorityDao priorityDao;
     private final TaskMapper taskMapper;
 
+    @Transactional
     @Override
     public CreateTaskResponseDTO createTask(Long projectId, Long teamId, CreateTaskRequestDTO createTaskRequestDTO) {
         final ProjectEntity project = projectDao.findById(projectId).orElseThrow(

@@ -6,6 +6,7 @@ import infsus.szup.repository.StatusDao;
 import infsus.szup.service.StatusService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -15,6 +16,7 @@ public class StatusServiceImpl implements StatusService {
     private final StatusDao statusDao;
     private final StatusMapper statusMapper;
 
+    @Transactional(readOnly = true)
     @Override
     public List<StatusResponseDTO> getAllStatuses() {
         return statusDao.findAll().stream().map(statusMapper::toStatusResponseDTO).toList();

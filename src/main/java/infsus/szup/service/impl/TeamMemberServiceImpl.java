@@ -43,6 +43,7 @@ public class TeamMemberServiceImpl implements TeamMemberService {
         teamMemberDao.save(teamMemberEntity);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<UserResponseDTO> getTeamMembers(Long teamId) {
         return teamDao.findById(teamId).orElseThrow(
