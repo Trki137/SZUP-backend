@@ -1,10 +1,15 @@
 package infsus.szup.service.impl;
 
+import infsus.szup.mapper.TeamMapper;
+import infsus.szup.model.dto.project.ProjectDetailsResponseDTO;
 import infsus.szup.model.dto.project.ProjectRequestDTO;
 import infsus.szup.model.dto.project.ProjectResponseDTO;
 import infsus.szup.model.dto.project.UpdateProjectReqDTO;
+import infsus.szup.model.dto.rights.UserRightsResponseDTO;
 import infsus.szup.model.dto.team.TeamRequestDTO;
+import infsus.szup.model.dto.team.TeamResponseDTO;
 import infsus.szup.model.entity.ProjectEntity;
+import infsus.szup.model.entity.TeamEntity;
 import infsus.szup.model.entity.UserEntity;
 import infsus.szup.repository.ProjectDao;
 import infsus.szup.repository.UserDao;
@@ -28,6 +33,7 @@ public class ProjectServiceImpl implements ProjectService {
     private final ProjectDao projectDao;
     private final UserDao userDao;
     private final TeamService teamService;
+    private final TeamMapper teamMapper;
     @PersistenceContext
     private final EntityManager em;
 
@@ -88,4 +94,37 @@ public class ProjectServiceImpl implements ProjectService {
         return projectDao.getAllProjectsForUser(userId).stream().map(project -> new ProjectResponseDTO(project
                 .getId(), project.getProjectName())).toList();
     }
+
+    @Override
+    public ProjectDetailsResponseDTO getProjectDetails(Long projectId, Long userId) {
+        final ProjectEntity project = projectDao.findById(projectId).orElseThrow(
+                () -> new EntityNotFoundException(String.format("Project with id %d doesn't exists", projectId))
+        );
+
+        boolean isProjectOwner = project.getCreatedBy().getId().equals(userId);
+        TeamEntity teamOwner = project.getTeams().stream()
+                .filter(team -> team.getTeamMembers().stream()
+                        .anyMatch(teamMemberEntity -> teamMemberEntity.getTeamLeader() && teamMemberEntity.getTeamMember().getId().equals(userId)))
+                .findFirst()
+                .orElse(null);
+        final boolean isTeamLeader = teamOwner != null;
+
+        UserRightsResponseDTO userRightsResponseDTO = new UserRightsResponseDTO(isProjectOwner, isTeamLeader);
+        return toProjectDetailsResponseDTO(project, userRightsResponseDTO, teamOwner);
+    }
+
+    private ProjectDetailsResponseDTO toProjectDetailsResponseDTO(ProjectEntity project, UserRightsResponseDTO userRightsResponseDTO, TeamEntity teamOwner) {
+        if (project == null) {
+            return null;
+        }
+
+        Long id = project.getId();
+        String projectName = project.getProjectName();
+        List<TeamResponseDTO> teams = userRightsResponseDTO.canModifyProject() ? project.getTeams().stream().map(teamMapper::toTeamResponseDTO).toList() : null;
+
+        TeamResponseDTO teamLeaderOf = teamMapper.toTeamResponseDTO(teamOwner);
+
+        return new ProjectDetailsResponseDTO(id, projectName, userRightsResponseDTO, teams, teamLeaderOf);
+    }
+
 }

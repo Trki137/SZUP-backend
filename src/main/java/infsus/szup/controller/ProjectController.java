@@ -1,5 +1,6 @@
 package infsus.szup.controller;
 
+import infsus.szup.model.dto.project.ProjectDetailsResponseDTO;
 import infsus.szup.model.dto.project.ProjectRequestDTO;
 import infsus.szup.model.dto.project.ProjectResponseDTO;
 import infsus.szup.model.dto.project.UpdateProjectReqDTO;
@@ -20,6 +21,12 @@ public class ProjectController {
     ResponseEntity<List<ProjectResponseDTO>> getAllProjectsForUser(@PathVariable Long userId){
         return ResponseEntity.ok(projectService.getAllProjectsForUser(userId));
     }
+
+    @GetMapping("/project/{projectId}/user/{userId}")
+    ResponseEntity<ProjectDetailsResponseDTO> getProjectDetails(@PathVariable Long projectId, @PathVariable Long userId){
+        return ResponseEntity.ok(projectService.getProjectDetails(projectId, userId));
+    }
+
     @PostMapping("/project/create")
     ResponseEntity<ProjectResponseDTO> createTeam(@RequestBody ProjectRequestDTO projectRequestDTO) {
         return ResponseEntity.ok(projectService.createProject(projectRequestDTO));
