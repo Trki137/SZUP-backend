@@ -28,7 +28,7 @@ public class ProjectController {
     }
 
     @PostMapping("/project/create")
-    ResponseEntity<ProjectResponseDTO> createTeam(@RequestBody ProjectRequestDTO projectRequestDTO) {
+    ResponseEntity<ProjectResponseDTO> createProject(@RequestBody ProjectRequestDTO projectRequestDTO) {
         return ResponseEntity.ok(projectService.createProject(projectRequestDTO));
     }
 
@@ -38,7 +38,7 @@ public class ProjectController {
     }
 
     @DeleteMapping("/project/{projectId}")
-    ResponseEntity<Void> createTeam(@PathVariable Long projectId) {
+    ResponseEntity<Void> deleteProject(@PathVariable Long projectId) {
         projectService.deleteProject(projectId);
         return ResponseEntity.ok().build();
     }

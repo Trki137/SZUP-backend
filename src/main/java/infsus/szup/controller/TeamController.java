@@ -24,7 +24,7 @@ public class TeamController {
     }
 
     @PostMapping("/project/{projectId}/team")
-    ResponseEntity<TeamResponseDTO> deleteTeam(@RequestBody TeamRequestDTO teamRequestDTO, @PathVariable Long projectId) {
+    ResponseEntity<TeamResponseDTO> createTeam(@RequestBody TeamRequestDTO teamRequestDTO, @PathVariable Long projectId) {
         return ResponseEntity.ok(teamService.createTeam(teamRequestDTO, projectId));
     }
 
