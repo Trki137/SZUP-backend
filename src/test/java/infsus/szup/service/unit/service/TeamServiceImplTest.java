@@ -1,4 +1,4 @@
-package infsus.szup.service;
+package infsus.szup.service.unit.service;
 
 import infsus.szup.mapper.TeamMapper;
 import infsus.szup.model.dto.team.TeamInfoResponseDTO;
@@ -13,6 +13,7 @@ import infsus.szup.repository.ProjectDao;
 import infsus.szup.repository.TeamDao;
 import infsus.szup.repository.TeamMemberDao;
 import infsus.szup.repository.UserDao;
+import infsus.szup.service.TeamMemberService;
 import infsus.szup.service.impl.TeamServiceImpl;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
@@ -71,7 +72,7 @@ public class TeamServiceImplTest {
         TeamRequestDTO teamRequestDTO = new TeamRequestDTO("Team A", 1L);
         ProjectEntity projectEntity = new ProjectEntity(1L, "Project A", LocalDateTime.now(), new UserEntity(), new ArrayList<>());
 
-        when(projectDao.findById(anyLong())).thenReturn(java.util.Optional.of(projectEntity));
+        when(projectDao.findById(anyLong())).thenReturn(Optional.of(projectEntity));
         when(teamDao.existsByTeamNameAndProject(anyString(), any(ProjectEntity.class))).thenReturn(false);
         when(teamDao.save(any(TeamEntity.class))).thenReturn(new TeamEntity());
         when(teamMapper.toTeamResponseDTO(any(TeamEntity.class))).thenReturn(new TeamResponseDTO(1L, "Team A", Collections.emptyList()));
@@ -89,7 +90,7 @@ public class TeamServiceImplTest {
 
     @Test
     void testCreateTeam_ProjectNotFound() {
-        when(projectDao.findById(anyLong())).thenReturn(java.util.Optional.empty());
+        when(projectDao.findById(anyLong())).thenReturn(Optional.empty());
 
         assertThrows(EntityNotFoundException.class, () -> teamService.createTeam(new TeamRequestDTO("Team A", 1L), 1L));
 
@@ -102,7 +103,7 @@ public class TeamServiceImplTest {
         TeamRequestDTO teamRequestDTO = new TeamRequestDTO("Team A", 1L);
         ProjectEntity projectEntity = new ProjectEntity(1L, "Project A", LocalDateTime.now(), new UserEntity(), new ArrayList<>());
 
-        when(projectDao.findById(anyLong())).thenReturn(java.util.Optional.of(projectEntity));
+        when(projectDao.findById(anyLong())).thenReturn(Optional.of(projectEntity));
         when(teamDao.existsByTeamNameAndProject(anyString(), any(ProjectEntity.class))).thenReturn(true);
 
         assertThrows(ResponseStatusException.class, () -> teamService.createTeam(teamRequestDTO, 1L));
@@ -121,8 +122,8 @@ public class TeamServiceImplTest {
         TeamEntity teamEntity = new TeamEntity();
         teamEntity.setProject(projectEntity);
 
-        when(projectDao.findById(anyLong())).thenReturn(java.util.Optional.of(projectEntity));
-        when(teamDao.findById(anyLong())).thenReturn(java.util.Optional.of(teamEntity));
+        when(projectDao.findById(anyLong())).thenReturn(Optional.of(projectEntity));
+        when(teamDao.findById(anyLong())).thenReturn(Optional.of(teamEntity));
         when(teamMapper.toTeamResponseDTO(any(TeamEntity.class))).thenReturn(new TeamResponseDTO(1L, "Updated Team", Collections.emptyList()));
 
         teamService.updateTeam(teamUpdateRequestDTO, 1L, 1L);
@@ -137,7 +138,7 @@ public class TeamServiceImplTest {
 
     @Test
     void testUpdateTeam_ProjectNotFound() {
-        when(projectDao.findById(anyLong())).thenReturn(java.util.Optional.empty());
+        when(projectDao.findById(anyLong())).thenReturn(Optional.empty());
 
         assertThrows(EntityNotFoundException.class, () -> teamService.updateTeam(new TeamUpdateRequestDTO("Updated Team"), 1L, 1L));
 
@@ -150,8 +151,8 @@ public class TeamServiceImplTest {
         ProjectEntity projectEntity = new ProjectEntity();
         projectEntity.setId(1L);
 
-        when(projectDao.findById(anyLong())).thenReturn(java.util.Optional.of(projectEntity));
-        when(teamDao.findById(anyLong())).thenReturn(java.util.Optional.empty());
+        when(projectDao.findById(anyLong())).thenReturn(Optional.of(projectEntity));
+        when(teamDao.findById(anyLong())).thenReturn(Optional.empty());
 
         assertThrows(EntityNotFoundException.class, () -> teamService.updateTeam(new TeamUpdateRequestDTO("Updated Team"), 1L, 1L));
 
@@ -171,9 +172,9 @@ public class TeamServiceImplTest {
         teamEntity.setProject(projectEntity);
         teamEntity.setTeamMembers(List.of(teamMemberEntity));
 
-        when(projectDao.findById(anyLong())).thenReturn(java.util.Optional.of(projectEntity));
-        when(teamDao.findById(anyLong())).thenReturn(java.util.Optional.of(teamEntity));
-        when(userDao.findById(anyLong())).thenReturn(java.util.Optional.of(userEntity));
+        when(projectDao.findById(anyLong())).thenReturn(Optional.of(projectEntity));
+        when(teamDao.findById(anyLong())).thenReturn(Optional.of(teamEntity));
+        when(userDao.findById(anyLong())).thenReturn(Optional.of(userEntity));
         when(teamMemberDao.save(any())).thenReturn(teamMemberEntity);
 
         teamService.addMember(1L, 1L, 1L, 1L);
@@ -189,7 +190,7 @@ public class TeamServiceImplTest {
 
     @Test
     void testAddMember_ProjectNotFound() {
-        when(projectDao.findById(anyLong())).thenReturn(java.util.Optional.empty());
+        when(projectDao.findById(anyLong())).thenReturn(Optional.empty());
 
         assertThrows(EntityNotFoundException.class, () -> teamService.addMember(1L, 1L, 1L, 1L));
 
@@ -201,8 +202,8 @@ public class TeamServiceImplTest {
     void testAddMember_TeamNotFound() {
         ProjectEntity projectEntity = new ProjectEntity();
 
-        when(projectDao.findById(anyLong())).thenReturn(java.util.Optional.of(projectEntity));
-        when(teamDao.findById(anyLong())).thenReturn(java.util.Optional.empty());
+        when(projectDao.findById(anyLong())).thenReturn(Optional.of(projectEntity));
+        when(teamDao.findById(anyLong())).thenReturn(Optional.empty());
 
         assertThrows(EntityNotFoundException.class, () -> teamService.addMember(1L, 1L, 1L, 1L));
 
@@ -218,9 +219,9 @@ public class TeamServiceImplTest {
         TeamEntity teamEntity = new TeamEntity();
         teamEntity.setProject(projectEntity);
 
-        when(projectDao.findById(anyLong())).thenReturn(java.util.Optional.of(projectEntity));
-        when(teamDao.findById(anyLong())).thenReturn(java.util.Optional.of(teamEntity));
-        when(userDao.findById(anyLong())).thenReturn(java.util.Optional.empty());
+        when(projectDao.findById(anyLong())).thenReturn(Optional.of(projectEntity));
+        when(teamDao.findById(anyLong())).thenReturn(Optional.of(teamEntity));
+        when(userDao.findById(anyLong())).thenReturn(Optional.empty());
 
         assertThrows(EntityNotFoundException.class, () -> teamService.addMember(1L, 1L, 1L, 1L));
 

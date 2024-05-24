@@ -1,4 +1,4 @@
-package infsus.szup.service;
+package infsus.szup.service.unit.service;
 
 import infsus.szup.mapper.TeamMapper;
 import infsus.szup.model.dto.project.ProjectDetailsResponseDTO;
@@ -64,7 +64,7 @@ public class ProjectServiceImplTest {
         projectEntity.setCreationDate(LocalDateTime.now());
 
         when(projectDao.existsByProjectName(any(String.class))).thenReturn(false);
-        when(userDao.findById(anyLong())).thenReturn(java.util.Optional.of(userEntity));
+        when(userDao.findById(anyLong())).thenReturn(Optional.of(userEntity));
         when(projectDao.save(any(ProjectEntity.class))).thenReturn(projectEntity);
 
         ProjectResponseDTO result = projectService.createProject(projectRequestDTO);
@@ -95,7 +95,7 @@ public class ProjectServiceImplTest {
         ProjectRequestDTO projectRequestDTO = new ProjectRequestDTO("Project A", 1L, new ArrayList<>());
 
         when(projectDao.existsByProjectName(any(String.class))).thenReturn(false);
-        when(userDao.findById(anyLong())).thenReturn(java.util.Optional.empty());
+        when(userDao.findById(anyLong())).thenReturn(Optional.empty());
 
         assertThrows(EntityNotFoundException.class, () -> projectService.createProject(projectRequestDTO));
 
@@ -111,7 +111,7 @@ public class ProjectServiceImplTest {
         ProjectEntity projectEntity = new ProjectEntity();
         projectEntity.setProjectName("Original Project");
 
-        when(projectDao.findById(anyLong())).thenReturn(java.util.Optional.of(projectEntity));
+        when(projectDao.findById(anyLong())).thenReturn(Optional.of(projectEntity));
         when(projectDao.existsByProjectName(any(String.class))).thenReturn(false);
 
         ProjectResponseDTO result = projectService.updateProject(1L, updateProjectReqDTO);
@@ -127,7 +127,7 @@ public class ProjectServiceImplTest {
     void testUpdateProject_ProjectNotFound() {
         UpdateProjectReqDTO updateProjectReqDTO = new UpdateProjectReqDTO("Updated Project");
 
-        when(projectDao.findById(anyLong())).thenReturn(java.util.Optional.empty());
+        when(projectDao.findById(anyLong())).thenReturn(Optional.empty());
 
         assertThrows(EntityNotFoundException.class, () -> projectService.updateProject(1L, updateProjectReqDTO));
 
@@ -140,7 +140,7 @@ public class ProjectServiceImplTest {
         UpdateProjectReqDTO updateProjectReqDTO = new UpdateProjectReqDTO("Updated Project");
         ProjectEntity projectEntity = new ProjectEntity();
 
-        when(projectDao.findById(anyLong())).thenReturn(java.util.Optional.of(projectEntity));
+        when(projectDao.findById(anyLong())).thenReturn(Optional.of(projectEntity));
         when(projectDao.existsByProjectName(any(String.class))).thenReturn(true);
 
         assertThrows(ResponseStatusException.class, () -> projectService.updateProject(1L, updateProjectReqDTO));
@@ -155,7 +155,7 @@ public class ProjectServiceImplTest {
     void testDeleteProject_Success() {
         ProjectEntity projectEntity = new ProjectEntity();
 
-        when(projectDao.findById(anyLong())).thenReturn(java.util.Optional.of(projectEntity));
+        when(projectDao.findById(anyLong())).thenReturn(Optional.of(projectEntity));
 
         projectService.deleteProject(1L);
 
@@ -166,7 +166,7 @@ public class ProjectServiceImplTest {
 
     @Test
     void testDeleteProject_ProjectNotFound() {
-        when(projectDao.findById(anyLong())).thenReturn(java.util.Optional.empty());
+        when(projectDao.findById(anyLong())).thenReturn(Optional.empty());
 
         assertThrows(EntityNotFoundException.class, () -> projectService.deleteProject(1L));
 

@@ -3,9 +3,9 @@ spring:
     name: szup
   datasource:
     driver-class-name: org.postgresql.Driver
-    username: <enter-username>
-    password: <enter-password>
-    url: <enter-db>
+    username: postgres
+    password: bazepodataka
+    url: jdbc:postgresql://localhost:5433/SZUP
   jpa:
     database: POSTGRESQL
     show-sql: false
