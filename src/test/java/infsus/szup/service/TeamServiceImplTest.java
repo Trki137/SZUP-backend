@@ -1,6 +1,7 @@
 package infsus.szup.service;
 
 import infsus.szup.mapper.TeamMapper;
+import infsus.szup.model.dto.team.TeamInfoResponseDTO;
 import infsus.szup.model.dto.team.TeamRequestDTO;
 import infsus.szup.model.dto.team.TeamResponseDTO;
 import infsus.szup.model.dto.team.TeamUpdateRequestDTO;
@@ -26,8 +27,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
@@ -97,7 +99,7 @@ public class TeamServiceImplTest {
 
     @Test
     void testCreateTeam_TeamAlreadyExists() {
-        TeamRequestDTO teamRequestDTO = new TeamRequestDTO("Team A",  1L);
+        TeamRequestDTO teamRequestDTO = new TeamRequestDTO("Team A", 1L);
         ProjectEntity projectEntity = new ProjectEntity(1L, "Project A", LocalDateTime.now(), new UserEntity(), new ArrayList<>());
 
         when(projectDao.findById(anyLong())).thenReturn(java.util.Optional.of(projectEntity));
@@ -228,5 +230,106 @@ public class TeamServiceImplTest {
         verifyNoMoreInteractions(projectDao);
         verifyNoMoreInteractions(teamDao);
         verifyNoMoreInteractions(userDao);
+    }
+
+    @Test
+    void testDeleteTeam_Success() {
+        ProjectEntity projectEntity = new ProjectEntity();
+        TeamEntity teamEntity = new TeamEntity(1L, "Team", projectEntity, Collections.emptyList());
+
+        when(projectDao.findById(anyLong())).thenReturn(Optional.of(projectEntity));
+        when(teamDao.findById(anyLong())).thenReturn(Optional.of(teamEntity));
+
+        teamService.deleteTeam(1L, 1L);
+
+        verify(projectDao, times(1)).findById(anyLong());
+        verify(teamDao, times(1)).findById(anyLong());
+        verify(teamDao, times(1)).delete(any(TeamEntity.class));
+        verifyNoMoreInteractions(projectDao, teamDao);
+    }
+
+    @Test
+    void testDeleteTeam_ProjectNotFound() {
+        when(projectDao.findById(anyLong())).thenReturn(Optional.empty());
+
+        assertThrows(EntityNotFoundException.class, () -> teamService.deleteTeam(1L, 1L));
+
+        verify(projectDao, times(1)).findById(anyLong());
+        verifyNoMoreInteractions(projectDao, teamDao);
+    }
+
+    @Test
+    void testDeleteTeam_TeamNotFound() {
+        ProjectEntity projectEntity = new ProjectEntity();
+
+        when(projectDao.findById(anyLong())).thenReturn(Optional.of(projectEntity));
+        when(teamDao.findById(anyLong())).thenReturn(Optional.empty());
+
+        assertThrows(EntityNotFoundException.class, () -> teamService.deleteTeam(1L, 1L));
+
+        verify(projectDao, times(1)).findById(anyLong());
+        verify(teamDao, times(1)).findById(anyLong());
+        verifyNoMoreInteractions(projectDao, teamDao);
+    }
+
+    @Test
+    void testRemoveMember_Success() {
+        ProjectEntity projectEntity = new ProjectEntity();
+        TeamEntity teamEntity = new TeamEntity(1L, "Team", projectEntity, Collections.emptyList());
+        TeamMemberEntity teamMemberEntity = new TeamMemberEntity();
+        TeamResponseDTO teamResponseDTO = new TeamResponseDTO(1L, "Team", Collections.emptyList());
+
+        when(projectDao.findById(anyLong())).thenReturn(Optional.of(projectEntity));
+        when(teamDao.findById(anyLong())).thenReturn(Optional.of(teamEntity));
+        when(userDao.getReferenceById(anyLong())).thenReturn(new UserEntity());
+        when(teamMemberDao.findByTeamMemberAndTeam(any(UserEntity.class), any(TeamEntity.class))).thenReturn(Optional.of(teamMemberEntity));
+        when(teamMapper.toTeamResponseDTO(any(TeamEntity.class))).thenReturn(teamResponseDTO);
+
+        TeamResponseDTO result = teamService.removeMember(1L, 1L, 1L, 1L);
+
+        assertNotNull(result);
+        assertEquals("Team", result.teamName());
+
+        verify(projectDao, times(1)).findById(anyLong());
+        verify(teamDao, times(1)).findById(anyLong());
+        verify(userDao, times(1)).getReferenceById(anyLong());
+        verify(teamMemberDao, times(1)).findByTeamMemberAndTeam(any(UserEntity.class), any(TeamEntity.class));
+        verify(teamMemberDao, times(1)).delete(any(TeamMemberEntity.class));
+        verify(em, times(1)).flush();
+        verify(em, times(1)).refresh(any(TeamEntity.class));
+        verify(teamMapper, times(1)).toTeamResponseDTO(any(TeamEntity.class));
+        verifyNoMoreInteractions(projectDao, teamDao, userDao, teamMemberDao, em, teamMapper);
+    }
+
+    @Test
+    void testGetTeamsForProject_Success() {
+        ProjectEntity projectEntity = new ProjectEntity();
+        TeamEntity teamEntity = new TeamEntity();
+        TeamInfoResponseDTO teamInfoResponseDTO = new TeamInfoResponseDTO(1L, "Team");
+
+        projectEntity.setTeams(Collections.singletonList(teamEntity));
+
+        when(projectDao.findById(anyLong())).thenReturn(Optional.of(projectEntity));
+        when(teamMapper.toTeamInfoResponseDTO(any(TeamEntity.class))).thenReturn(teamInfoResponseDTO);
+
+        List<TeamInfoResponseDTO> result = teamService.getTeamsForProject(1L);
+
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        assertEquals("Team", result.get(0).teamName());
+
+        verify(projectDao, times(1)).findById(anyLong());
+        verify(teamMapper, times(1)).toTeamInfoResponseDTO(any(TeamEntity.class));
+        verifyNoMoreInteractions(projectDao, teamMapper);
+    }
+
+    @Test
+    void testGetTeamsForProject_ProjectNotFound() {
+        when(projectDao.findById(anyLong())).thenReturn(Optional.empty());
+
+        assertThrows(EntityNotFoundException.class, () -> teamService.getTeamsForProject(1L));
+
+        verify(projectDao, times(1)).findById(anyLong());
+        verifyNoMoreInteractions(projectDao, teamMapper);
     }
 }
