@@ -1,0 +1,21 @@
+version: '3.1'
+
+services:
+  test-db:
+    container_name: szup_test_db
+    image: 'postgres:16.0'
+    environment:
+      - 'POSTGRES_DB=SZUPTest'
+      - 'POSTGRES_PASSWORD=bazepodataka'
+      - 'POSTGRES_USER=postgres'
+    ports:
+      - '5434:5432'
+#  prod-db:
+#    container_name: szup_db
+#    image: 'postgres:16.0'
+#    environment:
+#      - 'POSTGRES_DB=SZUP'
+#      - 'POSTGRES_PASSWORD=bazepodataka'
+#      - 'POSTGRES_USER=postgres'
+#    ports:
+#      - '5435:5432'

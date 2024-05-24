@@ -53,6 +53,7 @@ public class StatusApiIntegrationTest {
         List<StatusResponseDTO> statuses = response.getBody();
         assert statuses != null;
         assertEquals(response.getStatusCode().value(), 200);
+        assertEquals(statuses.size(), 4);
         assertEquals(statuses.size(), statusService.getAllStatuses().size());
         assertEquals(statuses.size(), statusDao.findAll().size());
     }
