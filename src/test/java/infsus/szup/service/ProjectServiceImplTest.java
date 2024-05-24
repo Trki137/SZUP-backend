@@ -1,9 +1,13 @@
 package infsus.szup.service;
 
+import infsus.szup.mapper.TeamMapper;
+import infsus.szup.model.dto.project.ProjectDetailsResponseDTO;
 import infsus.szup.model.dto.project.ProjectRequestDTO;
 import infsus.szup.model.dto.project.ProjectResponseDTO;
 import infsus.szup.model.dto.project.UpdateProjectReqDTO;
+import infsus.szup.model.dto.team.TeamResponseDTO;
 import infsus.szup.model.entity.ProjectEntity;
+import infsus.szup.model.entity.TeamEntity;
 import infsus.szup.model.entity.UserEntity;
 import infsus.szup.repository.ProjectDao;
 import infsus.szup.repository.UserDao;
@@ -19,9 +23,11 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
@@ -33,6 +39,9 @@ public class ProjectServiceImplTest {
 
     @Mock
     private UserDao userDao;
+
+    @Mock
+    private TeamMapper teamMapper;
 
     @Mock
     private EntityManager em;
@@ -163,6 +172,82 @@ public class ProjectServiceImplTest {
 
         verify(projectDao, times(1)).findById(anyLong());
         verifyNoMoreInteractions(projectDao);
+    }
+
+    @Test
+    void testGetAllProjectsForUser_Success() {
+        ProjectEntity project1 = new ProjectEntity();
+        project1.setId(1L);
+        project1.setProjectName("Project 1");
+
+        ProjectEntity project2 = new ProjectEntity();
+        project2.setId(2L);
+        project2.setProjectName("Project 2");
+
+        when(projectDao.getAllProjectsForUser(anyLong())).thenReturn(List.of(project1, project2));
+
+        List<ProjectResponseDTO> result = projectService.getAllProjectsForUser(1L);
+
+        assertNotNull(result);
+        assertEquals(2, result.size());
+        assertEquals("Project 1", result.get(0).projectName());
+        assertEquals("Project 2", result.get(1).projectName());
+
+        verify(projectDao, times(1)).getAllProjectsForUser(anyLong());
+        verifyNoMoreInteractions(projectDao);
+    }
+
+    @Test
+    void testGetAllProjectsForUser_EmptyList() {
+        when(projectDao.getAllProjectsForUser(anyLong())).thenReturn(Collections.emptyList());
+
+        List<ProjectResponseDTO> result = projectService.getAllProjectsForUser(1L);
+
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+
+        verify(projectDao, times(1)).getAllProjectsForUser(anyLong());
+        verifyNoMoreInteractions(projectDao);
+    }
+
+    @Test
+    void testGetProjectDetails_Success() {
+        Long projectId = 1L;
+        Long userId = 1L;
+        UserEntity userEntity = new UserEntity();
+        userEntity.setId(userId);
+
+        ProjectEntity projectEntity = new ProjectEntity(projectId, "Project", LocalDateTime.now(), userEntity, null);
+        projectEntity.setCreatedBy(userEntity);
+
+        TeamEntity teamEntity = new TeamEntity(1L, "Team", projectEntity,Collections.emptyList());
+        projectEntity.setTeams(List.of(teamEntity));
+
+        when(projectDao.findById(anyLong())).thenReturn(Optional.of(projectEntity));
+        when(teamMapper.toTeamResponseDTO(any(TeamEntity.class))).thenReturn(new TeamResponseDTO(1L, "Team", Collections.emptyList()));
+
+        ProjectDetailsResponseDTO result = projectService.getProjectDetails(projectId, userId);
+
+        assertNotNull(result);
+        assertEquals("Project", result.projectName());
+        assertTrue(result.userRightsResponseDTO().canModifyProject());
+        assertNotNull(result.teams());
+        assertEquals(1, result.teams().size());
+        assertEquals("Team", result.teams().get(0).teamName());
+
+        verify(projectDao, times(1)).findById(anyLong());
+        verify(teamMapper, times(1)).toTeamResponseDTO(any(TeamEntity.class));
+        verifyNoMoreInteractions(projectDao);
+    }
+
+    @Test
+    void testGetProjectDetails_ProjectNotFound() {
+        when(projectDao.findById(anyLong())).thenReturn(Optional.empty());
+
+        assertThrows(EntityNotFoundException.class, () -> projectService.getProjectDetails(1L, 1L));
+
+        verify(projectDao, times(1)).findById(anyLong());
+        verifyNoMoreInteractions(projectDao, teamMapper);
     }
 }
 
