@@ -1,0 +1,56 @@
+{
+  "tasks": [
+    {
+      "projectId": 1,
+      "teamId": 1,
+      "createTaskRequestDTO": {
+        "taskName": "Task 1",
+        "taskEndDate": null,
+        "description": "Description 1",
+        "numberOfHours": null,
+        "taskOwnerId": 1,
+        "taskSolverId": 5,
+        "taskPriorityId": 2
+      }
+    },
+    {
+      "projectId": 1,
+      "teamId": 1,
+      "createTaskRequestDTO": {
+        "taskName": "Task 2",
+        "taskEndDate": null,
+        "description": "Description 2",
+        "numberOfHours": null,
+        "taskOwnerId": 1,
+        "taskSolverId": 4,
+        "taskPriorityId": 3
+      }
+    },
+    {
+      "projectId": 1,
+      "teamId": 1,
+      "createTaskRequestDTO": {
+        "taskName": "Task 3",
+        "taskEndDate": null,
+        "description": "Description 3",
+        "numberOfHours": null,
+        "taskOwnerId": 3,
+        "taskSolverId": 4,
+        "taskPriorityId": 4
+      }
+    },
+    {
+      "projectId": 1,
+      "teamId": 2,
+      "createTaskRequestDTO": {
+        "taskName": "Task 4",
+        "taskEndDate": null,
+        "description": "Description 4",
+        "numberOfHours": null,
+        "taskOwnerId": 2,
+        "taskSolverId": 3,
+        "taskPriorityId": 1
+      }
+    }
+  ]
+}

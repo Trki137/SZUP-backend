@@ -56,6 +56,7 @@ public class TaskServiceImpl implements TaskService {
         }
 
         TaskEntity task = taskMapper.toTaskEntity(createTaskRequestDTO);
+        task.setProject(project);
         task.setTaskOwner(taskOwner);
         task.setTaskSolver(taskSolver);
         task.setTaskSetDate(LocalDateTime.now());

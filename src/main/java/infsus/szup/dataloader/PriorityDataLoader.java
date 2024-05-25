@@ -23,7 +23,7 @@ public class PriorityDataLoader implements CommandLineRunner {
     private final PriorityDao priorityDao;
     private static final String DATA_PATH = "/data/priority.json";
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         if (priorityDao.count() == 0) {
             log.info("Loading priorities into database from JSON: {}", DATA_PATH);
             try (InputStream inputStream = TypeReference.class.getResourceAsStream(DATA_PATH)) {

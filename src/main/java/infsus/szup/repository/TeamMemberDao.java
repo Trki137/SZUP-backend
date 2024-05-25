@@ -9,4 +9,5 @@ import java.util.Optional;
 
 public interface TeamMemberDao extends JpaRepository<TeamMemberEntity, Long> {
     Optional<TeamMemberEntity> findByTeamMemberAndTeam(UserEntity teamMember, TeamEntity team);
+    Boolean existsByTeamLeaderFalse();
 }

@@ -7,6 +7,7 @@ import infsus.szup.service.TeamService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -18,6 +19,7 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @Order(5)
+@Profile("test")
 public class TeamMembersDataLoader implements CommandLineRunner {
     private final ObjectMapper objectMapper;
     private final TeamService teamService;
@@ -26,7 +28,7 @@ public class TeamMembersDataLoader implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        if (teamMemberDao.count() == 0) {
+        if (!teamMemberDao.existsByTeamLeaderFalse()) {
             log.info("Loading team members into database from JSON: {}", DATA_PATH);
             try (InputStream inputStream = TypeReference.class.getResourceAsStream(DATA_PATH)) {
                 TeamMembers response = objectMapper.readValue(inputStream, TeamMembers.class);
