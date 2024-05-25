@@ -4,27 +4,27 @@
       "firstName": "Dean",
       "lastName": "Trkulja",
       "email": "dt@gmail.com",
-      "pass": "password"
+      "password": "password"
     },{
       "firstName": "Antonijo",
       "lastName": "Tomić",
       "email": "at@gmail.com",
-      "pass": "password 2"
+      "password": "password 2"
     },{
       "firstName": "Ivan",
       "lastName": "Majnarić",
       "email": "im@gmail.com",
-      "pass": "password 3"
+      "password": "password 3"
     },{
       "firstName": "Josipa",
       "lastName": "Mihaljević",
       "email": "jm@gmail.com",
-      "pass": "password 4"
+      "password": "password 4"
     },{
       "firstName": "Iva",
       "lastName": "Goluža",
       "email": "ig@gmail.com",
-      "pass": "password 5"
+      "password": "password 5"
     }
   ]
 }
