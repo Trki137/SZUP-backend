@@ -20,7 +20,7 @@ public class TaskController {
     }
 
     @GetMapping("/task/{taskId}")
-    public ResponseEntity<TaskDetailsDTO> createTask(@PathVariable Long taskId) {
+    public ResponseEntity<TaskDetailsDTO> getTaskDetails(@PathVariable Long taskId) {
         return ResponseEntity.ok(taskService.getTaskDetails(taskId));
     }
 

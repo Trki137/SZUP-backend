@@ -14,6 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping
+@CrossOrigin(origins = "http://localhost:5173")
 public class ProjectController {
     private final ProjectService projectService;
 
@@ -33,7 +34,7 @@ public class ProjectController {
     }
 
     @PutMapping("/project/{projectId}")
-    ResponseEntity<ProjectResponseDTO> createTeam(@PathVariable Long projectId, @RequestBody UpdateProjectReqDTO updateProjectReqDTO) {
+    ResponseEntity<ProjectResponseDTO> updateProject(@PathVariable Long projectId, @RequestBody UpdateProjectReqDTO updateProjectReqDTO) {
         return ResponseEntity.ok(projectService.updateProject(projectId, updateProjectReqDTO));
     }
 
