@@ -11,11 +11,12 @@ public interface ProjectDao extends JpaRepository<ProjectEntity, Long> {
 
     String GET_PROJECTS_FOR_USER_QUERY = """
             SELECT DISTINCT
-            	project.*
+                project.*
             FROM team_member
-            JOIN team on team_member.team_id = team.team_id
-            JOIN project on team.project_id = project.project_id
-            WHERE team_member.user_id = :userId
+            JOIN team ON team_member.team_id = team.team_id
+            JOIN project ON team.project_id = project.project_id
+            WHERE team_member.user_id = :userId or project.user_id = :userId
+                        
             """;
     @Query(value = GET_PROJECTS_FOR_USER_QUERY, nativeQuery = true)
     List<ProjectEntity> getAllProjectsForUser(Long userId);
