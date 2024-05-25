@@ -1,0 +1,30 @@
+{
+  "users": [
+    {
+      "firstName": "Dean",
+      "lastName": "Trkulja",
+      "email": "dt@gmail.com",
+      "pass": "password"
+    },{
+      "firstName": "Antonijo",
+      "lastName": "Tomić",
+      "email": "at@gmail.com",
+      "pass": "password 2"
+    },{
+      "firstName": "Ivan",
+      "lastName": "Majnarić",
+      "email": "im@gmail.com",
+      "pass": "password 3"
+    },{
+      "firstName": "Josipa",
+      "lastName": "Mihaljević",
+      "email": "jm@gmail.com",
+      "pass": "password 4"
+    },{
+      "firstName": "Iva",
+      "lastName": "Goluža",
+      "email": "ig@gmail.com",
+      "pass": "password 5"
+    }
+  ]
+}
