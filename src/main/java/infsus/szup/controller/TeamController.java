@@ -14,6 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping
+@CrossOrigin(origins = "http://localhost:5173")
 public class TeamController {
     private final TeamService teamService;
 
@@ -28,12 +29,12 @@ public class TeamController {
         return ResponseEntity.ok(teamService.createTeam(teamRequestDTO, projectId));
     }
 
-    @PutMapping("/project/{projectId}/team/{teamId}/add-member/{memberId}/{addedById}")
+    @PostMapping("/project/{projectId}/team/{teamId}/add-member/{memberId}/{addedById}")
     ResponseEntity<TeamResponseDTO> addMember(@PathVariable Long projectId, @PathVariable Long teamId, @PathVariable Long memberId, @PathVariable Long addedById) {
         return ResponseEntity.ok(teamService.addMember(projectId, teamId, memberId, addedById));
     }
 
-    @PutMapping("/project/{projectId}/team/{teamId}/remove-member/{memberId}/{removedBy}")
+    @DeleteMapping("/project/{projectId}/team/{teamId}/remove-member/{memberId}/{removedBy}")
     ResponseEntity<TeamResponseDTO> removeMember(@PathVariable Long projectId, @PathVariable Long teamId, @PathVariable Long memberId, @PathVariable Long removedBy) {
         return ResponseEntity.ok(teamService.removeMember(projectId, teamId, memberId, removedBy));
     }

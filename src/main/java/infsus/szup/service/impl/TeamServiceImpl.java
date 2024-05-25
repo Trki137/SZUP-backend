@@ -160,13 +160,12 @@ public class TeamServiceImpl implements TeamService {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only team leader can add new member of a team");
         }
 
-        final TeamMemberEntity teamMemberEntity = teamMemberDao.findByTeamMemberAndTeam(userDao.getReferenceById(memberId), team).orElseThrow(
+        teamMemberDao.findById(memberId).orElseThrow(
                 () -> new EntityNotFoundException(String.format("Team member with id %d doesnt exists", memberId))
         );
 
-        teamMemberDao.delete(teamMemberEntity);
+        teamMemberDao.deleteTeamMember(memberId);
         em.flush();
-        em.refresh(team);
         return teamMapper.toTeamResponseDTO(team);
     }
 

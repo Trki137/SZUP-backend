@@ -15,5 +15,5 @@ public interface TaskService {
 
     TaskDetailsDTO changeTaskSolver(Long projectId, Long taskId, TaskSolverChangeDTO taskSolverChangeDTO);
 
-    UserTasksDTO getUserTasks(Long userId);
+    UserTasksDTO getUserTasks(Long projectId,Long userId);
 }

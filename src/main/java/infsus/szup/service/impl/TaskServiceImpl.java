@@ -188,14 +188,19 @@ public class TaskServiceImpl implements TaskService {
 
     @Transactional(readOnly = true)
     @Override
-    public UserTasksDTO getUserTasks(Long userId) {
+    public UserTasksDTO getUserTasks(Long projectId, Long userId) {
         final UserEntity user = userDao.findById(userId).orElseThrow(
                 () -> new EntityNotFoundException(String.format("User with id %d not found!", userId))
         );
 
+        final ProjectEntity project = projectDao.findById(projectId).orElseThrow(
+                () -> new EntityNotFoundException(String.format("Project with id %d doesn't exists", projectId))
+        );
+
+
         return new UserTasksDTO(
-                taskDao.findByTaskSolver(user).stream().map(taskMapper::toTaskResponseDTO).toList(),
-                taskDao.findByTaskOwner(user).stream().map(taskMapper::toTaskResponseDTO).toList()
+                taskDao.findByTaskSolverAndProject(user, project).stream().map(taskMapper::toTaskResponseDTO).toList(),
+                taskDao.findByTaskOwnerAndProject(user, project).stream().map(taskMapper::toTaskResponseDTO).toList()
         );
     }
 }

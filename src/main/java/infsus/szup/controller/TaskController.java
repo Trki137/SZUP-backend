@@ -20,13 +20,13 @@ public class TaskController {
     }
 
     @GetMapping("/task/{taskId}")
-    public ResponseEntity<TaskDetailsDTO> createTask(@PathVariable Long taskId) {
+    public ResponseEntity<TaskDetailsDTO> getTaskDetails(@PathVariable Long taskId) {
         return ResponseEntity.ok(taskService.getTaskDetails(taskId));
     }
 
-    @GetMapping("/task/all-tasks/user/{userId}")
-    public ResponseEntity<UserTasksDTO> getUserTasks(Long userId) {
-        return ResponseEntity.ok(taskService.getUserTasks(userId));
+    @GetMapping("/project/{projectId}/task/all-tasks/user/{userId}")
+    public ResponseEntity<UserTasksDTO> getUserTasks(@PathVariable Long projectId,@PathVariable Long userId) {
+        return ResponseEntity.ok(taskService.getUserTasks(projectId,userId));
     }
 
     @DeleteMapping("/task/{taskId}")
