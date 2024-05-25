@@ -9,13 +9,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
+import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.List;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@Testcontainers
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class StatusApiIntegrationTest {
     @LocalServerPort
@@ -32,6 +38,11 @@ public class StatusApiIntegrationTest {
 
     private static HttpHeaders headers;
 
+    @Container
+    @ServiceConnection
+    private static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16.0");
+
+
     @BeforeAll
     public static void init() {
         headers = new HttpHeaders();
@@ -42,6 +53,11 @@ public class StatusApiIntegrationTest {
         return String.format("http://localhost:%d/api/status/all-statuses", port);
     }
 
+    @Test
+    void connectionEstablished() {
+        assertThat(postgres.isCreated()).isTrue();
+        assertThat(postgres.isRunning()).isTrue();
+    }
     @Test
     public void testGetAllStatuses() {
         HttpEntity<String> entity = new HttpEntity<>(null, headers);
