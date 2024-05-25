@@ -2,8 +2,9 @@ package infsus.szup.dataloader;
 
 import aj.org.objectweb.asm.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import infsus.szup.model.entity.StatusEntity;
-import infsus.szup.repository.StatusDao;
+import infsus.szup.model.dto.project.ProjectRequestDTO;
+import infsus.szup.repository.ProjectDao;
+import infsus.szup.service.ProjectService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
@@ -17,25 +18,26 @@ import java.util.List;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-@Order(2)
-public class StatusDataLoader implements CommandLineRunner {
+@Order(4)
+public class ProjectsDataLoader implements CommandLineRunner {
     private final ObjectMapper objectMapper;
-    private final StatusDao statusDao;
-    private static final String DATA_PATH = "/data/status.json";
+    private final ProjectDao projectDao;
+    private final ProjectService projectService;
+    private static final String DATA_PATH = "/data/projects.json";
 
     @Override
     public void run(String... args) {
-        if (statusDao.count() == 0) {
-            log.info("Loading statutes into database from JSON: {}", DATA_PATH);
+        if (projectDao.count() == 0) {
+            log.info("Loading projects into database from JSON: {}", DATA_PATH);
             try (InputStream inputStream = TypeReference.class.getResourceAsStream(DATA_PATH)) {
-                Statuses response = objectMapper.readValue(inputStream, Statuses.class);
-                statusDao.saveAll(response.statuses());
+                Projects response = objectMapper.readValue(inputStream, Projects.class);
+                response.projectRequestDTOS.forEach(projectService::createProject);
             } catch (IOException e) {
                 throw new RuntimeException("Failed to read JSON data", e);
             }
         }
     }
 
-    private record Statuses(List<StatusEntity> statuses) {
+    private record Projects(List<ProjectRequestDTO> projectRequestDTOS) {
     }
 }

@@ -7,6 +7,7 @@ import infsus.szup.repository.UserDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -16,6 +17,7 @@ import java.util.List;
 @Slf4j
 @Component
 @RequiredArgsConstructor
+@Order(1)
 public class UserDataLoader implements CommandLineRunner {
 
     private final ObjectMapper objectMapper;
@@ -38,3 +40,4 @@ public class UserDataLoader implements CommandLineRunner {
     private record Users(List<UserEntity> users) {
     }
 }
+
