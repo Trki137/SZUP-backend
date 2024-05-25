@@ -60,13 +60,13 @@ public class StatusApiIntegrationTest {
     }
     @Test
     public void testGetAllStatuses() {
-        HttpEntity<String> entity = new HttpEntity<>(null, headers);
-        ResponseEntity<List<StatusResponseDTO>> response = testRestTemplate.exchange(
+        final HttpEntity<String> entity = new HttpEntity<>(null, headers);
+        final ResponseEntity<List<StatusResponseDTO>> response = testRestTemplate.exchange(
                 createURLWithPort(), HttpMethod.GET, entity, new ParameterizedTypeReference<>() {
                 }
         );
 
-        List<StatusResponseDTO> statuses = response.getBody();
+        final List<StatusResponseDTO> statuses = response.getBody();
         assert statuses != null;
         assertEquals(response.getStatusCode().value(), 200);
         assertEquals(statuses.size(), 4);
