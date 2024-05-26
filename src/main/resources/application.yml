@@ -2,4 +2,4 @@ spring:
   application:
     name: szup
   profiles:
-    active: dev
+    active: test
