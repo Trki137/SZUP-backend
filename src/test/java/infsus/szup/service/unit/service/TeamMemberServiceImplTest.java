@@ -1,4 +1,4 @@
-package infsus.szup.service;
+package infsus.szup.service.unit.service;
 
 import infsus.szup.model.dto.team.teammember.TeamMemberRequestDTO;
 import infsus.szup.model.entity.TeamEntity;

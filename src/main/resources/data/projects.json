@@ -1,0 +1,47 @@
+{
+  "projectRequestDTOS": [
+    {
+      "projectName": "Project 1",
+      "createdById": 1,
+      "teams": [
+        {
+          "teamName": "Backend",
+          "teamLeaderId": 1
+        },{
+          "teamName": "Frontend",
+          "teamLeaderId": 2
+        }
+      ]
+    },{
+      "projectName": "Project 2",
+      "createdById": 3,
+      "teams": [
+        {
+          "teamName": "Tim 1",
+          "teamLeaderId": 4
+        },{
+          "teamName": "Tim 2",
+          "teamLeaderId": 5
+        },{
+          "teamName": "Tim 3",
+          "teamLeaderId": 2
+        }
+      ]
+    },{
+      "projectName": "Project 3",
+      "createdById": 5,
+      "teams": [
+        {
+          "teamName": "Dev Ops",
+          "teamLeaderId": 3
+        },{
+          "teamName": "Upravljanje bazama",
+          "teamLeaderId": 5
+        },{
+          "teamName": "Mobilne aplikacije",
+          "teamLeaderId": 4
+        }
+      ]
+    }
+  ]
+}

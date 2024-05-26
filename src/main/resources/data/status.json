@@ -1,0 +1,13 @@
+{
+  "statuses": [
+    {
+      "statusName": "Nije započeto"
+    },{
+      "statusName": "U tijeku"
+    },{
+      "statusName": "Na pregledu"
+    },{
+      "statusName": "Zatvoren"
+    }
+  ]
+}

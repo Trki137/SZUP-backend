@@ -1,0 +1,17 @@
+{
+  "priorities": [
+    {
+      "level": 1,
+      "priorityName": "Kritično"
+    },{
+      "level": 2,
+      "priorityName": "Visoko"
+    },{
+      "level": 3,
+      "priorityName": "Srednje"
+    },{
+      "level": 4,
+      "priorityName": "Nisko"
+    }
+  ]
+}

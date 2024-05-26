@@ -1,0 +1,51 @@
+{
+  "users": [
+    {
+      "firstName": "Dean",
+      "lastName": "Trkulja",
+      "email": "dt@gmail.com",
+      "password": "password"
+    },{
+      "firstName": "Anja",
+      "lastName": "Veber",
+      "email": "av@gmail.com",
+      "password": "password av"
+    }
+    ,{
+      "firstName": "Antonijo",
+      "lastName": "Tomić",
+      "email": "at@gmail.com",
+      "password": "password 2"
+    },{
+      "firstName": "Ivan",
+      "lastName": "Majnarić",
+      "email": "im@gmail.com",
+      "password": "password 3"
+    },{
+      "firstName": "Josipa",
+      "lastName": "Mihaljević",
+      "email": "jm@gmail.com",
+      "password": "password 4"
+    },{
+      "firstName": "Iva",
+      "lastName": "Goluža",
+      "email": "ig@gmail.com",
+      "password": "password 5"
+    },{
+      "firstName": "Pero",
+      "lastName": "Trkulja",
+      "email": "pt@gmail.com",
+      "password": "password 6"
+    },{
+      "firstName": "Dušica",
+      "lastName": "Trkulja",
+      "email": "dtm@gmail.com",
+      "password": "password 7"
+    },{
+      "firstName": "David",
+      "lastName": "Alavanja",
+      "email": "da@gmail.com",
+      "password": "password 8"
+    }
+  ]
+}

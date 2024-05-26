@@ -1,29 +1,5 @@
 spring:
   application:
     name: szup
-  datasource:
-    driver-class-name: org.postgresql.Driver
-    username: <enter-username>
-    password: <enter-password>
-    url: <enter-db>
-  jpa:
-    database: POSTGRESQL
-    show-sql: false
-    hibernate:
-      ddl-auto: update
-    properties:
-      hibernate:
-        hibernate:
-          schema_update:
-            unique_constraint_strategy: RECREATE_QUIETLY
-        format_sql: true
-        default_schema: public
-
-server:
-  servlet:
-    context-path: /api
-    encoding:
-      charset: UTF-8
-  port: 8080
-  error:
-    include-stacktrace: never
+  profiles:
+    active: dev

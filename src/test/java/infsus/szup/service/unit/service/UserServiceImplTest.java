@@ -1,4 +1,4 @@
-package infsus.szup.service;
+package infsus.szup.service.unit.service;
 
 import infsus.szup.mapper.UserMapper;
 import infsus.szup.model.dto.users.UserResponseDTO;

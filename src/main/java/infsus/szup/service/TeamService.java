@@ -16,7 +16,7 @@ public interface TeamService {
 
     TeamResponseDTO addMember(Long projectId, Long teamId, Long memberId, Long addedByUserId);
 
-    TeamResponseDTO removeMember(Long projectId, Long teamId, Long memberId, Long removedByUserId);
+    void removeMember(Long projectId, Long teamId, Long memberId, Long removedByUserId);
 
     List<TeamInfoResponseDTO> getTeamsForProject(Long projectId);
 }
