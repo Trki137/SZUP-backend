@@ -36,7 +36,8 @@ public class TeamController {
 
     @DeleteMapping("/project/{projectId}/team/{teamId}/remove-member/{memberId}/{removedBy}")
     ResponseEntity<TeamResponseDTO> removeMember(@PathVariable Long projectId, @PathVariable Long teamId, @PathVariable Long memberId, @PathVariable Long removedBy) {
-        return ResponseEntity.ok(teamService.removeMember(projectId, teamId, memberId, removedBy));
+        teamService.removeMember(projectId, teamId, memberId, removedBy);
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping("/project/{projectId}/team/{teamId}")
@@ -45,7 +46,7 @@ public class TeamController {
     }
 
     @GetMapping("/project/{projectId}/teams")
-    public ResponseEntity<List<TeamInfoResponseDTO>> getTeamMembers(@PathVariable Long projectId){
+    public ResponseEntity<List<TeamInfoResponseDTO>> getTeamMembers(@PathVariable Long projectId) {
         return ResponseEntity.ok(teamService.getTeamsForProject(projectId));
     }
 

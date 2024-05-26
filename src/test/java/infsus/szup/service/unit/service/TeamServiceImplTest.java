@@ -282,23 +282,14 @@ public class TeamServiceImplTest {
 
         when(projectDao.findById(anyLong())).thenReturn(Optional.of(projectEntity));
         when(teamDao.findById(anyLong())).thenReturn(Optional.of(teamEntity));
-        when(userDao.getReferenceById(anyLong())).thenReturn(new UserEntity());
-        when(teamMemberDao.findByTeamMemberAndTeam(any(UserEntity.class), any(TeamEntity.class))).thenReturn(Optional.of(teamMemberEntity));
-        when(teamMapper.toTeamResponseDTO(any(TeamEntity.class))).thenReturn(teamResponseDTO);
+        when(teamMemberDao.findById(anyLong())).thenReturn(Optional.of(teamMemberEntity));
 
-        TeamResponseDTO result = teamService.removeMember(1L, 1L, 1L, 1L);
-
-        assertNotNull(result);
-        assertEquals("Team", result.teamName());
+        teamService.removeMember(1L, 1L, 1L, 1L);
 
         verify(projectDao, times(1)).findById(anyLong());
         verify(teamDao, times(1)).findById(anyLong());
-        verify(userDao, times(1)).getReferenceById(anyLong());
-        verify(teamMemberDao, times(1)).findByTeamMemberAndTeam(any(UserEntity.class), any(TeamEntity.class));
-        verify(teamMemberDao, times(1)).delete(any(TeamMemberEntity.class));
-        verify(em, times(1)).flush();
-        verify(em, times(1)).refresh(any(TeamEntity.class));
-        verify(teamMapper, times(1)).toTeamResponseDTO(any(TeamEntity.class));
+        verify(teamMemberDao, times(1)).findById(anyLong());
+        verify(teamMemberDao, times(1)).deleteTeamMember(anyLong());
         verifyNoMoreInteractions(projectDao, teamDao, userDao, teamMemberDao, em, teamMapper);
     }
 

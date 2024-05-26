@@ -137,7 +137,7 @@ public class TeamServiceImpl implements TeamService {
 
     @Transactional
     @Override
-    public TeamResponseDTO removeMember(Long projectId, Long teamId, Long memberId, Long removedByUserId) {
+    public void removeMember(Long projectId, Long teamId, Long memberId, Long removedByUserId) {
         final ProjectEntity project = projectDao.findById(projectId).orElseThrow(
                 () -> new EntityNotFoundException(String.format("Project with id %d doesn't exists", projectId))
         );
@@ -165,8 +165,6 @@ public class TeamServiceImpl implements TeamService {
         );
 
         teamMemberDao.deleteTeamMember(memberId);
-        em.flush();
-        return teamMapper.toTeamResponseDTO(team);
     }
 
     @Transactional(readOnly = true)
