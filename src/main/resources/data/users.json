@@ -6,6 +6,12 @@
       "email": "dt@gmail.com",
       "password": "password"
     },{
+      "firstName": "Anja",
+      "lastName": "Veber",
+      "email": "av@gmail.com",
+      "password": "password av"
+    }
+    ,{
       "firstName": "Antonijo",
       "lastName": "Tomić",
       "email": "at@gmail.com",
@@ -25,6 +31,21 @@
       "lastName": "Goluža",
       "email": "ig@gmail.com",
       "password": "password 5"
+    },{
+      "firstName": "Pero",
+      "lastName": "Trkulja",
+      "email": "pt@gmail.com",
+      "password": "password 6"
+    },{
+      "firstName": "Dušica",
+      "lastName": "Trkulja",
+      "email": "dtm@gmail.com",
+      "password": "password 7"
+    },{
+      "firstName": "David",
+      "lastName": "Alavanja",
+      "email": "da@gmail.com",
+      "password": "password 8"
     }
   ]
 }
