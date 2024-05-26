@@ -42,6 +42,10 @@ public class TaskServiceImpl implements TaskService {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, String.format("Team %s doesn't belong to this project", team.getTeamName()));
         }
 
+        if (createTaskRequestDTO.taskOwnerId() == createTaskRequestDTO.taskSolverId()){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Kreator zadatka ne može biti i izvršitelj");
+        }
+
         final UserEntity taskOwner = userDao.findById(createTaskRequestDTO.taskOwnerId()).orElseThrow(
                 () -> new EntityNotFoundException(String.format("User with id %d not found!", createTaskRequestDTO.taskOwnerId()))
         );
@@ -120,6 +124,9 @@ public class TaskServiceImpl implements TaskService {
         }
 
         if (updateByUser.equals(task.getTaskOwner())) {
+            if (Status.NOT_STARTED.getId() == currentStatus.getId() || Status.IN_PROGRESS.getId() == currentStatus.getId()){
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Neispravan novi status");
+            }
             if (Status.IN_REVIEW.getId() == currentStatus.getId()) {
                 if (Status.CLOSED.getId() != nextStatusId && Status.IN_PROGRESS.getId() == nextStatusId) {
                     throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Neispravan novi status");
@@ -171,11 +178,6 @@ public class TaskServiceImpl implements TaskService {
         boolean isPartOfTeam = team.getTeamMembers().stream().anyMatch(member -> member.getTeamMember().equals(taskSolver));
         if (!isPartOfTeam) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, String.format("User %s doesn't belong to team %s", taskSolver.getFirstName() + " " + taskSolver.getLastName(), team.getTeamName()));
-        }
-
-        isPartOfTeam = team.getTeamMembers().stream().anyMatch(member -> member.getTeamMember().equals(changedByUser));
-        if (!isPartOfTeam) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, String.format("User %s doesn't belong to team %s", changedByUser.getFirstName() + " " + changedByUser.getLastName(), team.getTeamName()));
         }
 
         final TaskEntity task = taskDao.findById(taskId).orElseThrow(
