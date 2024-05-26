@@ -335,7 +335,8 @@ public class TaskApiIntegrationTest {
     @Test
     public void getUserTasks_UserNotFound_ShouldFail() {
         final Long userId = 999L;
-        final String getUserTasksURL = String.format("%s/task/all-tasks/user/%d", createBaseURL(), userId);
+        final Long projectId = 1L;
+        final String getUserTasksURL = String.format("%s/project/%d/task/all-tasks/user/%d", createBaseURL(), projectId, userId);
 
         final HttpEntity<String> entity = new HttpEntity<>(null, headers);
         final ResponseEntity<String> response = testRestTemplate.exchange(
